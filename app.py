@@ -226,6 +226,15 @@ class ConfigManager:
                     config.update(file_config)
             except Exception as e:
                 app.logger.error(f"Errore nel caricamento della configurazione: {e}")
+
+    def save_config(self, config):
+    try:
+        with open(self.config_file, 'w') as f:
+            json.dump(config, f, indent=4)
+        print(f"Configuração salva em {self.config_file}")
+    except Exception as e:
+        print(f"Erro ao salvar configuração: {e}")
+
         
         # Combina proxy da variabili d'ambiente con quelli del file
         proxy_keys = ['SOCKS5_PROXY', 'HTTP_PROXY', 'HTTPS_PROXY']
