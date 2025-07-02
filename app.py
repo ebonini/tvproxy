@@ -36,12 +36,9 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 app.permanent_session_lifetime = timedelta(minutes=5)
 
 # --- Configurazione Autenticazione ---
-ADMIN_USERNAME = config.get('ADMIN_USERNAME', 'admin')
-ADMIN_PASSWORD = config.get('ADMIN_PASSWORD', 'password123')
-ALLOWED_IPS = config.get('ALLOWED_IPS', '').split(',') if config.get('ALLOWED_IPS') else []
-
-# Chave secreta do Flask
-app.secret_key = config.get('SECRET_KEY', 'your-secret-key-change-this-in-production')
+ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'password123')
+ALLOWED_IPS = os.environ.get('ALLOWED_IPS', '').split(',') if os.environ.get('ALLOWED_IPS') else []
 
 def setup_all_caches():
     global M3U8_CACHE, TS_CACHE, KEY_CACHE, MPD_CACHE
@@ -312,7 +309,6 @@ class ConfigManager:
         return True
 
 config_manager = ConfigManager()
-config = config_manager.config
 
 # --- Log Manager ---
 class LogManager:
