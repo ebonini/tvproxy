@@ -212,13 +212,10 @@ class ConfigManager:
             'ADMIN_PASSWORD': 'password123',
             'CACHE_ENABLED': True,
         }
+        self.config = self.load_config()
         
     def load_config(self):
-        """Carica la configurazione combinando proxy da file e variabili d'ambiente"""
-        # Inizia con i valori di default
         config = self.default_config.copy()
-        
-        # Carica dal file se esiste (seconda priorità)
         if os.path.exists(self.config_file):
             try:
                 with open(self.config_file, 'r') as f:
@@ -226,6 +223,15 @@ class ConfigManager:
                     config.update(file_config)
             except Exception as e:
                 app.logger.error(f"Errore nel caricamento della configurazione: {e}")
+        return config
+
+    def save_config(self, config):
+        try:
+            with open(self.config_file, 'w') as f:
+                json.dump(config, f, indent=4)
+            print(f"Configuração salva em {self.config_file}")
+        except Exception as e:
+            print(f"Erro ao salvar configuração: {e}")
         
         # Combina proxy da variabili d'ambiente con quelli del file
         proxy_keys = ['SOCKS5_PROXY', 'HTTP_PROXY', 'HTTPS_PROXY']
