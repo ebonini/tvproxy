@@ -188,7 +188,7 @@ setup_logging()
 # --- Configurazione Manager ---
 class ConfigManager:
     def __init__(self):
-        self.config_file = '/tmp/proxy_config.json'
+        self.config_file = '/data/proxy_config.json'
         self.default_config = {
             'SOCKS5_PROXY': '',
             'HTTP_PROXY': '',
