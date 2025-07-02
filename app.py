@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
 from flask import Flask, request, Response, jsonify, render_template_string, session, redirect, url_for
 import requests
 from urllib.parse import urlparse, urljoin, quote, unquote
@@ -6,11 +9,9 @@ import traceback
 import json
 import base64
 from urllib.parse import quote_plus
-import os
 import random
 import time
 from cachetools import TTLCache, LRUCache
-from dotenv import load_dotenv
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 import psutil
@@ -33,8 +34,6 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-change-this-in-production')
 socketio = SocketIO(app, cors_allowed_origins="*")
 app.permanent_session_lifetime = timedelta(minutes=5)
-
-load_dotenv()
 
 # --- Configurazione Autenticazione ---
 ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
