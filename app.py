@@ -188,7 +188,9 @@ setup_logging()
 # --- Configurazione Manager ---
 class ConfigManager:
     def __init__(self):
-        self.config_file = 'proxy_config.json'
+        self.config_dir = "/data"
+        os.makedirs(self.config_dir, exist_ok=True)
+        self.config_file = os.path.join(self.config_dir, "proxy_config.json")
         self.default_config = {
             'SOCKS5_PROXY': '',
             'HTTP_PROXY': '',
@@ -208,7 +210,7 @@ class ConfigManager:
             'ALLOWED_IPS': '',
             'ADMIN_USERNAME': 'admin',
             'ADMIN_PASSWORD': 'password123',
-            'CACHE_ENABLED' : True,
+            'CACHE_ENABLED': True,
         }
         
     def load_config(self):
