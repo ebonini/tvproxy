@@ -195,12 +195,12 @@ class ConfigManager:
             'HTTPS_PROXY': '',
             'REQUEST_TIMEOUT': 30,
             'VERIFY_SSL': False,
-            'KEEP_ALIVE_TIMEOUT': 900,
-            'MAX_KEEP_ALIVE_REQUESTS': 5000,
-            'POOL_CONNECTIONS': 50,
-            'POOL_MAXSIZE': 300,
+            'KEEP_ALIVE_TIMEOUT': 300,
+            'MAX_KEEP_ALIVE_REQUESTS': 1000,
+            'POOL_CONNECTIONS': 20,
+            'POOL_MAXSIZE': 50,
             'CACHE_TTL_M3U8': 5,
-            'CACHE_TTL_TS': 600,
+            'CACHE_TTL_TS': 300,
             'CACHE_TTL_KEY': 300,
             'CACHE_MAXSIZE_M3U8': 200,
             'CACHE_MAXSIZE_TS': 1000,
@@ -209,7 +209,7 @@ class ConfigManager:
             'ADMIN_USERNAME': 'admin',
             'ADMIN_PASSWORD': 'password123',
             'CACHE_ENABLED' : True,
-            'NO_PROXY_DOMAINS': 'github.com,vavoo.to',
+            'NO_PROXY_DOMAINS': 'github.com,vavoo.to,oha.to',
         }
         
     def load_config(self):
