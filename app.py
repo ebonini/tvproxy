@@ -195,12 +195,12 @@ class ConfigManager:
             'HTTPS_PROXY': '',
             'REQUEST_TIMEOUT': 30,
             'VERIFY_SSL': False,
-            'KEEP_ALIVE_TIMEOUT': 300,
-            'MAX_KEEP_ALIVE_REQUESTS': 1000,
-            'POOL_CONNECTIONS': 20,
-            'POOL_MAXSIZE': 50,
+            'KEEP_ALIVE_TIMEOUT': 900,
+            'MAX_KEEP_ALIVE_REQUESTS': 5000,
+            'POOL_CONNECTIONS': 50,
+            'POOL_MAXSIZE': 300,
             'CACHE_TTL_M3U8': 5,
-            'CACHE_TTL_TS': 300,
+            'CACHE_TTL_TS': 600,
             'CACHE_TTL_KEY': 300,
             'CACHE_MAXSIZE_M3U8': 200,
             'CACHE_MAXSIZE_TS': 1000,
@@ -209,6 +209,7 @@ class ConfigManager:
             'ADMIN_USERNAME': 'admin',
             'ADMIN_PASSWORD': 'password123',
             'CACHE_ENABLED' : True,
+            'NO_PROXY_DOMAINS': 'github.com,vavoo.to',
         }
         
     def load_config(self):
@@ -509,17 +510,16 @@ def setup_proxies():
         app.logger.info("Nessun proxy (SOCKS5, HTTP, HTTPS) configurato.")
 
 def get_proxy_for_url(url):
-    """Seleziona un proxy casuale dalla lista, ma lo salta per i domini GitHub."""
+    config = config_manager.load_config()
+    no_proxy_domains = [d.strip() for d in config.get('NO_PROXY_DOMAINS', '').split(',') if d.strip()]
     if not PROXY_LIST:
         return None
-
     try:
         parsed_url = urlparse(url)
-        if 'github.com' in parsed_url.netloc:
+        if any(domain in parsed_url.netloc for domain in no_proxy_domains):
             return None
     except Exception:
         pass
-
     chosen_proxy = random.choice(PROXY_LIST)
     return {'http': chosen_proxy, 'https': chosen_proxy}
 
@@ -2608,6 +2608,11 @@ CONFIG_TEMPLATE = """
                             <label for="https_proxy">Proxy HTTPS:</label>
                             <textarea id="https_proxy" name="HTTPS_PROXY" rows="2" placeholder="https://proxy1:8080,https://proxy2:8080">{{ config.HTTPS_PROXY }}</textarea>
                         </div>
+                        <div class="form-group">
+                            <label for="no_proxy_domains"><b>Domini senza proxy:</b></label>
+                            <input type="text" id="no_proxy_domains" name="NO_PROXY_DOMAINS" value="{{ config.NO_PROXY_DOMAINS }}" placeholder="vavoo.to,newkso.ru,daddylive.sx">
+                            <small>Lista di domini separati da virgola per cui NON usare il proxy</small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3520,7 +3525,7 @@ def test_config():
         daddy_url = "https://new.newkso.ru/wind/"
         vavoo_url = 'https://vavoo.to/play/1534161807/index.m3u8'
         vavoo_headers = {
-            'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/33.0 Mobile/15E148 Safari/605.1.15',
+            'user-agent': 'VAVOO/2.6',
             'referer': 'https://vavoo.to/',
             'origin': 'https://vavoo.to'
         }
