@@ -209,7 +209,7 @@ class ConfigManager:
             'ADMIN_USERNAME': 'admin',
             'ADMIN_PASSWORD': 'password123',
             'CACHE_ENABLED' : True,
-            'NO_PROXY_DOMAINS': 'github.com,vavoo.to,oha.to',
+            'NO_PROXY_DOMAINS': 'github.com,vavoo.to',
         }
         
     def load_config(self):
